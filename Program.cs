@@ -6,6 +6,7 @@ namespace Yet_another_explanation_of_variance
 
     class DerivedClass : BaseClass { }
 
+
     delegate TOutput InvariantFunc<TOutput>();
 
     delegate void InvariantAction<TInput>(TInput input);
