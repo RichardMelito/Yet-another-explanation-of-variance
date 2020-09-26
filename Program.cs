@@ -3,28 +3,28 @@
 namespace Yet_another_explanation_of_variance
 {
     class BaseClass { }
+
     class DerivedClass : BaseClass { }
 
     delegate TOutput InvariantFunc<TOutput>();
+
     delegate void InvariantAction<TInput>(TInput input);
+
+
 
     class Program
     {
-        DerivedClass ReturnDerivedClass()
-        {
-            return new DerivedClass();
-        }
+        DerivedClass ReturnDerivedClass() { return new DerivedClass(); }
 
-        void ArgumentBaseClass(BaseClass input)
-        {
-
-        }
+        void InputBaseClass(BaseClass input) { }
 
         void LegalInvariance()
         {
             InvariantFunc<BaseClass> notCovariance = ReturnDerivedClass;
+            BaseClass aBaseClassInstance = notCovariance();
 
-            InvariantAction<DerivedClass> notContravariance = ArgumentBaseClass;
+            InvariantAction<DerivedClass> notContravariance = InputBaseClass;
+            notContravariance(new DerivedClass());
         }
 
         void IllegalInvariance()
@@ -34,22 +34,20 @@ namespace Yet_another_explanation_of_variance
             InvariantFunc<BaseClass> needsCovariance = returnDerived;
 
 
-            InvariantAction<BaseClass> argumentBase = ArgumentBaseClass;
+            InvariantAction<BaseClass> argumentBase = InputBaseClass;
             // illegal:
             InvariantAction<DerivedClass> needsContravariance = argumentBase;
         }
 
-        void Covariance()
+        void CovarianceAndContravariance()
         {
             Func<DerivedClass> returnDerived = ReturnDerivedClass;
-            // legal:
+            // legal because TOutput in Func<TOutput> is covariant
             Func<BaseClass> usesCovariance = returnDerived;
-        }
 
-        void Contravariance()
-        {
-            Action<BaseClass> argumentBase = ArgumentBaseClass;
-            // legal:
+
+            Action<BaseClass> argumentBase = InputBaseClass;
+            // legal because TInput in Action<TInput> is contravariant
             Action<DerivedClass> usesContravariance = argumentBase;
         }
 
