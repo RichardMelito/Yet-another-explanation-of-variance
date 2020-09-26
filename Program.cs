@@ -2,9 +2,9 @@
 
 namespace Yet_another_explanation_of_variance
 {
-    class BaseClass { }
+    class Base { }
 
-    class DerivedClass : BaseClass { }
+    class Derived : Base { }
 
 
     delegate TOutput InvariantFunc<TOutput>();
@@ -15,41 +15,41 @@ namespace Yet_another_explanation_of_variance
 
     class Program
     {
-        DerivedClass ReturnDerivedClass() { return new DerivedClass(); }
+        Derived ReturnDerived() { return new Derived(); }
 
-        void InputBaseClass(BaseClass input) { }
+        void InputBase(Base input) { }
 
         void LegalInvariance()
         {
-            InvariantFunc<BaseClass> notCovariance = ReturnDerivedClass;
-            BaseClass aBaseClassInstance = notCovariance();
+            InvariantFunc<Base> notCovariance = ReturnDerived;
+            Base aBaseClassInstance = notCovariance();
 
-            InvariantAction<DerivedClass> notContravariance = InputBaseClass;
-            notContravariance(new DerivedClass());
+            InvariantAction<Derived> notContravariance = InputBase;
+            notContravariance(new Derived());
         }
 
         void IllegalInvariance()
         {
-            InvariantFunc<DerivedClass> returnDerived = ReturnDerivedClass;
+            InvariantFunc<Derived> returnDerived = ReturnDerived;
             // illegal:
-            InvariantFunc<BaseClass> needsCovariance = returnDerived;
+            InvariantFunc<Base> needsCovariance = returnDerived;
 
 
-            InvariantAction<BaseClass> inputBase = InputBaseClass;
+            InvariantAction<Base> inputBase = InputBase;
             // illegal:
-            InvariantAction<DerivedClass> needsContravariance = inputBase;
+            InvariantAction<Derived> needsContravariance = inputBase;
         }
 
         void CovarianceAndContravariance()
         {
-            Func<DerivedClass> returnDerived = ReturnDerivedClass;
+            Func<Derived> returnDerived = ReturnDerived;
             // legal because TOutput in Func<TOutput> is covariant
-            Func<BaseClass> usesCovariance = returnDerived;
+            Func<Base> usesCovariance = returnDerived;
 
 
-            Action<BaseClass> inputBase = InputBaseClass;
+            Action<Base> inputBase = InputBase;
             // legal because TInput in Action<TInput> is contravariant
-            Action<DerivedClass> usesContravariance = inputBase;
+            Action<Derived> usesContravariance = inputBase;
         }
 
         static void Main(string[] args)
