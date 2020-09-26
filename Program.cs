@@ -35,9 +35,9 @@ namespace Yet_another_explanation_of_variance
             InvariantFunc<BaseClass> needsCovariance = returnDerived;
 
 
-            InvariantAction<BaseClass> argumentBase = InputBaseClass;
+            InvariantAction<BaseClass> inputBase = InputBaseClass;
             // illegal:
-            InvariantAction<DerivedClass> needsContravariance = argumentBase;
+            InvariantAction<DerivedClass> needsContravariance = inputBase;
         }
 
         void CovarianceAndContravariance()
@@ -47,9 +47,9 @@ namespace Yet_another_explanation_of_variance
             Func<BaseClass> usesCovariance = returnDerived;
 
 
-            Action<BaseClass> argumentBase = InputBaseClass;
+            Action<BaseClass> inputBase = InputBaseClass;
             // legal because TInput in Action<TInput> is contravariant
-            Action<DerivedClass> usesContravariance = argumentBase;
+            Action<DerivedClass> usesContravariance = inputBase;
         }
 
         static void Main(string[] args)
